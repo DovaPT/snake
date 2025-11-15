@@ -1,15 +1,30 @@
 #![allow(dead_code)]
 use std::{
     collections::LinkedList,
-    io::{self, Stdout, Write},
+    io::{
+        self,
+        Stdout,
+        Write,
+    },
     ops,
-    sync::mpsc::{self, Receiver, SyncSender},
+    sync::mpsc::{
+        self,
+        Receiver,
+        SyncSender,
+    },
     thread,
-    time::{Duration, Instant},
+    time::{
+        Duration,
+        Instant,
+    },
 };
 
 use termion::{
-    event::Key, input::TermRead, raw::IntoRawMode, screen::IntoAlternateScreen, terminal_size,
+    event::Key,
+    input::TermRead,
+    raw::IntoRawMode,
+    screen::IntoAlternateScreen,
+    terminal_size,
 };
 
 fn main() {
@@ -24,9 +39,10 @@ fn main() {
 fn handle_input(sender: SyncSender<Commands>) {
     let mut key_reader = io::stdin().keys();
     while let Some(Ok(key)) = key_reader.next() {
-        let Some(command) = Commands::from_key(key) else {continue};
-        if sender.send(command).is_err() || matches!(command, Commands::Quit)
-        {
+        let Some(command) = Commands::from_key(key) else {
+            continue;
+        };
+        if sender.send(command).is_err() || matches!(command, Commands::Quit) {
             break;
         }
     }
